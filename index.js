@@ -8,17 +8,19 @@ function getDataGoogleCivicAPI(userAddress, callback) {
         key: civicAPIkey,
         address: `${userAddress}`,
     }
-    $.getJSON(GOOGLE_CIVIC_URL, setting, function(json) {
-        console.log(json);
-    });
+    $.getJSON(GOOGLE_CIVIC_URL, setting, callback);
 }
 
-function renderGoogleCivic() {
-    console.log(`renderGoogleCivic ran`);
+function renderGoogleCivic(result) {
+    console.log(`renderGoogleCivic ran, name = ${result.name}`);
+    return `
+    <p>${result.name}</p>`;
 }
 
-function displayGoogleCivic() {
+function displayGoogleCivic(data) {
     console.log(`displayGoogleCivic ran`);
+    const results = data.officials.map((item, index) => renderGoogleCivic(item));
+    $('#results').html(results);
 }
 
 function watchCivicSubmit() {
