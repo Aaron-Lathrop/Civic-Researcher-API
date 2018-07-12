@@ -1,11 +1,19 @@
-// This is where I'll write tons of awesome javascript
-
 //Google Civic API code
-function getDataGoogleCivicAPI {
+const GOOGLE_CIVIC_URL = 'https://www.googleapis.com/civicinfo/v2/representatives';
+const civicAPIkey = 'AIzaSyA5z-WSZ6wIlhOW3mFNgUMh-63djxwyDms';
+
+function getDataGoogleCivicAPI(userAddress, callback) {
     console.log(`getDataGoogleCivicAPI ran`);
+    const setting = {
+        key: civicAPIkey,
+        address: `${userAddress}`,
+    }
+    $.getJSON(GOOGLE_CIVIC_URL, setting, function(json) {
+        console.log(json);
+    });
 }
 
-function renderGoogleCivic {
+function renderGoogleCivic() {
     console.log(`renderGoogleCivic ran`);
 }
 
@@ -15,7 +23,17 @@ function displayGoogleCivic() {
 
 function watchCivicSubmit() {
     console.log(`watchCivicSubmit ran`);
+    $('#address-form').on('submit', function(e){
+        e.preventDefault();
+        const addressQuery = $(e.currentTarget).find('#address-search');
+        const query = addressQuery.val();
+        addressQuery.val('');
+        console.log(`${query}`);
+        getDataGoogleCivicAPI(query, displayGoogleCivic);
+    });
 }
+
+$(watchCivicSubmit);
 
 
 //Google Search API code
@@ -38,7 +56,7 @@ function watchSearchSubmit() {
 
 //YouTube API code
 const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
-const APIkey = 'AIzaSyAeXH1TNL5oTEVqbPGq8rrh6DF8WTbkKHE';
+const youTubeAPIkey = 'AIzaSyAeXH1TNL5oTEVqbPGq8rrh6DF8WTbkKHE';
 
 
 function getDataYouTubeAPI(searchTerm, callback) {
