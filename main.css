@@ -1,2 +1,18 @@
 /* This will be the main place to style my sheet */
 
+#displayingResultsFor {
+    text-align: center;
+    font-weight: bold;
+}
+
+header {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+form label {
+    display: block;
+}

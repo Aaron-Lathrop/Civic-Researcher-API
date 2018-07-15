@@ -7,19 +7,44 @@ function getDataGoogleCivicAPI(userAddress, callback) {
     const setting = {
         key: civicAPIkey,
         address: `${userAddress}`,
-    }
+    };
     $.getJSON(GOOGLE_CIVIC_URL, setting, callback);
 }
 
-function renderGoogleCivic(result) {
-    console.log(`renderGoogleCivic ran, name = ${result.name}`);
+function renderOfficials(data) {
+    console.log(`renderGoogleCivic ran, name = ${data.name}`);
+    console.log(data);
+    const results = data.officials.map((item, index) => `${item.name}`);
+    console.log(results);
+    return results;
+}
+
+function displayOffices(data) {
+    console.log(`displayOffices ran`)
+    const results = data.offices.map((item, index) => `${item.name}`);
+    console.log(results);
+    return results;
+}
+
+function renderOffices(result) {
     return `
-    <p>${result.name}</p>`;
+    ${result.name}`;
 }
 
 function displayGoogleCivic(data) {
     console.log(`displayGoogleCivic ran`);
-    const results = data.officials.map((item, index) => renderGoogleCivic(item));
+    const offices = displayOffices(data);
+    console.log(`The first office is: ${offices[0]}`);
+    const names = renderOfficials(data);
+    console.log(`The first name is: ${names[0]}`);
+    let results = "";
+    for(let i=0; i < offices.length; i++) {
+        const officeIndex = data.offices[i].officialIndices;
+        for(let j=0; j < officeIndex.length; j++) {
+            const currentIndex = officeIndex[j];
+            results += `<p>${offices[i]} - ${names[currentIndex]}</p>`;
+        }
+    }
     $('#results').html(results);
 }
 
@@ -30,7 +55,8 @@ function watchCivicSubmit() {
         const addressQuery = $(e.currentTarget).find('#address-search');
         const query = addressQuery.val();
         addressQuery.val('');
-        console.log(`${query}`);
+        console.log(`Displaying results for ${query}`);
+        $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
         getDataGoogleCivicAPI(query, displayGoogleCivic);
     });
 }
