@@ -1,6 +1,28 @@
+'use strict';
+
 //Google Civic API code
 const GOOGLE_CIVIC_URL = 'https://www.googleapis.com/civicinfo/v2/representatives';
 const civicAPIkey = 'AIzaSyA5z-WSZ6wIlhOW3mFNgUMh-63djxwyDms';
+
+class Politican {
+    constructor(name, office, picture, line1, line2, city, state, zip, party, phone, url, GooglePlus, Facebook, Twitter, YouTube) {
+        this.name = name;
+        this.office = office;
+        this.picture = picture;
+        this.line1 = line1;
+        this.line2 = line2;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.party = party;
+        this.phone = phone;
+        this.url = url;
+        this.GooglePlus = GooglePlus;
+        this.Facebook = Facebook;
+        this.Twitter = Twitter;
+        this.YouTube = YouTube;
+    }
+}
 
 function getDataGoogleCivicAPI(userAddress, callback) {
     console.log(`getDataGoogleCivicAPI ran`);
@@ -19,21 +41,16 @@ function renderOfficials(data) {
     return results;
 }
 
-function displayOffices(data) {
-    console.log(`displayOffices ran`)
+function renderOffices(data) {
+    console.log(` renderOffices ran`)
     const results = data.offices.map((item, index) => `${item.name}`);
     console.log(results);
     return results;
 }
 
-function renderOffices(result) {
-    return `
-    ${result.name}`;
-}
-
 function displayGoogleCivic(data) {
     console.log(`displayGoogleCivic ran`);
-    const offices = displayOffices(data);
+    const offices = renderOffices(data);
     console.log(`The first office is: ${offices[0]}`);
     const names = renderOfficials(data);
     console.log(`The first name is: ${names[0]}`);
