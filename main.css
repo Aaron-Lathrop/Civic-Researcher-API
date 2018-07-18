@@ -1,4 +1,7 @@
 /* This will be the main place to style my sheet */
+* {
+
+}
 
 #displayingResultsFor {
     text-align: center;
@@ -15,15 +18,11 @@ form {
 
 form label {
     display: block;
+    font-size: 18px;
 }
 
-#displayingResultsFor {
-    text-align: center;
-    font-weight: bold;
-}
-
-form label {
-    display: block;
+input {
+    font-size: 18px;
 }
 
 main {
@@ -40,4 +39,22 @@ li {
 
 li:hover {
     cursor: pointer;
+    color: blue;
+}
+
+#results {
+    font-size: 18px;
+
+}
+
+#resultPicture img {
+    text-align: center;
+    height: auto;
+    width: 236px;
+}
+
+#moreResults {
+    text-align: center;
+    font-size: 18px;
+
 }

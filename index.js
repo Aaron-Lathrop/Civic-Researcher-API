@@ -32,10 +32,17 @@ class Politican {
             return this.federal;
         }
 
+        socialMedia() {
+            let social = "";
+            for(let i = 0; i < this.channels.length; i++) {
+                social += `<p>${this.channels[i].type}: ${this.channels[i].id}</p>`
+            }
+            return social;
+        }
+
 }
 
 function getDataGoogleCivicAPI(userAddress, callback) {
-    console.log(`getDataGoogleCivicAPI ran`);
     const setting = {
         key: civicAPIkey,
         address: `${userAddress}`,
@@ -52,7 +59,6 @@ function createPoliticanList(data) {
     for(let i = 0; i < data.officials.length - 1; i++){
         let politican = new Politican();
         politican.index = i;
-        console.log(politican.index);
         if(i < data.offices.length) {
             officeIndex = data.offices[i].officialIndices;
             politican.office = offices[i];
@@ -83,21 +89,20 @@ function createPoliticanList(data) {
     return politicanList;
 }
 
-function renderOfficials(data) {
-    console.log(`renderGoogleCivic ran, name = ${data.name}`);
-    const results = data.officials.map((item, index) => `${item.name}`);
-    return results;
-}
+// function renderOfficials(data) {
+//     console.log(`renderGoogleCivic ran, name = ${data.name}`);
+//     const results = data.officials.map((item, index) => `${item.name}`);
+//     return results;
+// }
 
-function renderOffices(data) {
-    console.log(` renderOffices ran`)
-    const results = data.offices.map((item, index) => `${item.name}`);
-    return results;
-}
+// function renderOffices(data) {
+//     console.log(` renderOffices ran`)
+//     const results = data.offices.map((item, index) => `${item.name}`);
+//     return results;
+// }
 
 function displayResults(data) {
     const politican = createPoliticanList(data);
-    console.log(`displayResults ran`);
     let federalResults = "<h2>Federal Level</h2><ul>";
     let localResults = "<h2>Local Level</h2><ul>";
     for(let i=0; i < politican.length; i++) {
@@ -116,11 +121,16 @@ function displayResults(data) {
 }
 
 function displayMoreResults(politicanList) {
-    console.log(`displayMoreResults ran`);
     $('li').on('click', function(e) {
         const id = $(this).attr("id");
-        console.log(`id = ${id}`);
-        $('#resultPicture').find('img').attr('src', `${politicanList[id].picture}`);
+        const politican = politicanList[id];
+        $('#resultPicture').find('img').attr('src', `${politican.picture}`);
+        $('#resultInfo').html(`<h2>${politican.name}</h2>
+        <h3>Info</h3>
+        <p>This is going to be super duper information about ${politican.name}</p>`);
+        $('#resultSocialMedia').html(`<h3>Social Media</h3>
+        ${politican.socialMedia()}`);
+        $('#youTubeResults').html('<h3>YouTube Videos</h3>');
     });
 }
 
