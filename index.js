@@ -3,10 +3,9 @@
 //Google Civic API code
 const GOOGLE_CIVIC_URL = 'https://www.googleapis.com/civicinfo/v2/representatives';
 const civicAPIkey = 'AIzaSyA5z-WSZ6wIlhOW3mFNgUMh-63djxwyDms';
-let politicanList = []; 
 
 class Politican {
-    constructor(name, office, picture, line1, line2, city, state, zip, party, phone, url, email, channels) {
+    constructor(name, office, picture, line1, line2, city, state, zip, party, phone, url, email, channels, federal, index) {
         this.name = name;
         this.office = office;
         this.picture = picture;
@@ -20,7 +19,19 @@ class Politican {
         this.url = url;
         this.email = email;
         this.channels = channels;
+        this.federal = federal;
+        this.index = index;
     }
+
+        isFederal() {
+            if(this.office.includes('United States')) {
+                this.federal = true;
+            } else {
+                this.federal = false;
+            }
+            return this.federal;
+        }
+
 }
 
 function getDataGoogleCivicAPI(userAddress, callback) {
@@ -35,17 +46,20 @@ function getDataGoogleCivicAPI(userAddress, callback) {
 
 function createPoliticanList(data) {
     const politicanList = [];
-    const officials = renderOfficials(data);
-    const offices = renderOffices(data);
+    const officials = data.officials.map((item, index) => `${item.name}`);
+    const offices = data.offices.map((item, index) => `${item.name}`);
     let officeIndex = [];
-    for(let i = 0; i < data.officials.length; i++){
+    for(let i = 0; i < data.officials.length - 1; i++){
         let politican = new Politican();
+        politican.index = i;
+        console.log(politican.index);
         if(i < data.offices.length) {
             officeIndex = data.offices[i].officialIndices;
             politican.office = offices[i];
+            
         } else {
-            officeIndex = data.offices[offices.length - 1 ].officialIndices;
-            politican.office = offices[i - 1];
+            officeIndex = data.offices[offices.length -1].officialIndices;
+            politican.office = offices[i -1];
         }
         for(let j=0; j < officeIndex.length; j++) {
             const currentIndex = officeIndex[j];
@@ -71,36 +85,43 @@ function createPoliticanList(data) {
 
 function renderOfficials(data) {
     console.log(`renderGoogleCivic ran, name = ${data.name}`);
-    console.log(`data.officials returns ${data.officials.name}`);
     const results = data.officials.map((item, index) => `${item.name}`);
-    console.log(results);
     return results;
 }
 
 function renderOffices(data) {
     console.log(` renderOffices ran`)
     const results = data.offices.map((item, index) => `${item.name}`);
-    console.log(results);
     return results;
 }
 
-function displayGoogleCivic(data) {
-    const test = createPoliticanList(data);
-    console.log(`This is a test to seem if createPoliticanList works here. test[13].phone = ${test[13].phone}`);
-    console.log(`displayGoogleCivic ran`);
-    const offices = renderOffices(data);
-    console.log(`The first office is: ${offices[0]}`);
-    const names = renderOfficials(data);
-    console.log(`The first name is: ${names[0]}`);
-    let results = "";
-    for(let i=0; i < offices.length; i++) {
-        const officeIndex = data.offices[i].officialIndices;
-        for(let j=0; j < officeIndex.length; j++) {
-            const currentIndex = officeIndex[j];
-            results += `<p>${offices[i]} - ${names[currentIndex]}</p>`;
+function displayResults(data) {
+    const politican = createPoliticanList(data);
+    console.log(`displayResults ran`);
+    let federalResults = "<h2>Federal Level</h2><ul>";
+    let localResults = "<h2>Local Level</h2><ul>";
+    for(let i=0; i < politican.length; i++) {
+        if(politican[i].isFederal() === true) {
+            federalResults += `<li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li>`
+        } else {
+            localResults += `<li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li>`
         }
+        
     }
-    $('#results').html(results);
+    federalResults += '</ul>';
+    localResults += '</ul>';
+    $('#federal').html(federalResults);
+    $('#local').html(localResults);
+    $(displayMoreResults(politican));
+}
+
+function displayMoreResults(politicanList) {
+    console.log(`displayMoreResults ran`);
+    $('li').on('click', function(e) {
+        const id = $(this).attr("id");
+        console.log(`id = ${id}`);
+        $('#resultPicture').find('img').attr('src', `${politicanList[id].picture}`);
+    });
 }
 
 function watchCivicSubmit() {
@@ -110,9 +131,9 @@ function watchCivicSubmit() {
         const addressQuery = $(e.currentTarget).find('#address-search');
         const query = addressQuery.val();
         addressQuery.val('');
-        console.log(`Displaying results for ${query}`);
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
-        getDataGoogleCivicAPI(query, displayGoogleCivic);
+        getDataGoogleCivicAPI(query, displayResults);
+        
     });
 }
 

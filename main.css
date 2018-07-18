@@ -16,3 +16,28 @@ form {
 form label {
     display: block;
 }
+
+#displayingResultsFor {
+    text-align: center;
+    font-weight: bold;
+}
+
+form label {
+    display: block;
+}
+
+main {
+  text-align: center;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+li:hover {
+    cursor: pointer;
+}
