@@ -124,13 +124,31 @@ function displayMoreResults(politicanList) {
     $('li').on('click', function(e) {
         const id = $(this).attr("id");
         const politican = politicanList[id];
-        $('#resultPicture').find('img').attr('src', `${politican.picture}`);
+        //clear previous information, in case of no results
+        $('#resultSocialMedia').html("");
+
+        //display picture, show default if no result
+        if(politican.picture != undefined){
+            $('#resultPicture').find('img').attr('src', `${politican.picture}`);
+        } else {
+            $('#resultPicture').find('img').attr('src', `https://2.bp.blogspot.com/-gL72SZb5r1A/V5zitzG0yiI/AAAAAAAAH1M/glC6e03Cx6E8k6qXLg61SB3r06xcfoTfACLcB/s1600/captain_america_by_cptcommunist-da55g3v.png`);
+        }
+
+        //display general information about politican
         $('#resultInfo').html(`<h2>${politican.name}</h2>
         <h3>Info</h3>
         <p>This is going to be super duper information about ${politican.name}</p>`);
-        $('#resultSocialMedia').html(`<h3>Social Media</h3>
-        ${politican.socialMedia()}`);
+
+        //display social media information
+        if(politican.channels != undefined){
+            $('#resultSocialMedia').html(`<h3>Social Media</h3>
+             ${politican.socialMedia()}`);
+        }
+        
+
+        //display YouTube results
         $('#youTubeResults').html('<h3>YouTube Videos</h3>');
+        $(watchSubmit(politican));
     });
 }
 
@@ -140,7 +158,16 @@ function watchCivicSubmit() {
         e.preventDefault();
         const addressQuery = $(e.currentTarget).find('#address-search');
         const query = addressQuery.val();
-        addressQuery.val('');
+        if(query != undefined && query != "") {
+            // $('#results').html("");
+            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
+            addressQuery.val('');
+            getDataGoogleCivicAPI(query, displayResults);
+        } else if(query === "") {
+            $('#displayingResultsFor').html(`<p>Please submit an address before continuing, for example</p>
+            <p>1600 Pennsulvania Ave NW, Washington, DC 20500</p>`)
+        }
+        
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
         getDataGoogleCivicAPI(query, displayResults);
         
@@ -176,24 +203,33 @@ const youTubeAPIkey = 'AIzaSyAeXH1TNL5oTEVqbPGq8rrh6DF8WTbkKHE';
 function getDataYouTubeAPI(searchTerm, callback) {
     const settings = {
         part: 'snippet',
-        key: APIkey,
-        q: `${searchTerm}`
+        key: youTubeAPIkey,
+        q: `${searchTerm}`,
+        maxResults: 6,
     }
     $.getJSON(YOUTUBE_SEARCH_URL, settings, callback);
 }
 
-function renderYouTube() {
-    console.log(`renderYouTube ran`);
-}
+function renderYouTube(result) {
 
-function displayYouTube() {
+    if(result.id.kind === "youtube#video") {
+      return `
+      <iframe class="results" src="https://www.youtube.com/embed/${result.id.videoId}" height='180' width='320' title='${result.snippet.title}' aria-label='YouTube Video'> `;
+    } else if(result.id.kind === "youtube#channel") {
+      return `
+      <a href="https://www.youtube.com/user/${result.snippet.channelTitle}" target="_blank" rel="noopener" aria-label='YouTube Channel'><img class='results' src='${result.snippet.thumbnails.medium.url}' alt='${result.snippet.title}' height='180' width='320'></a>`;
+    }
+  }
+
+function displayYouTube(data) {
     const results = data.items.map((item, index) => renderYouTube(item));
-    $('#js-YouTube-results').html( results );
+    $('#youTubeResults').append( results );
 }
 
-function watchYouTubeSubmit() {
-    console.log(`watchCivicSubmit ran`);
-}
+function watchSubmit(politican) {
+      const query = politican.name;
+      getDataYouTubeAPI(query, displayYouTube);
+  }
 
 
 //General functionality

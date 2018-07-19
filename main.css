@@ -1,6 +1,7 @@
 /* This will be the main place to style my sheet */
-* {
 
+body {
+    background-color: whitesmoke;
 }
 
 #displayingResultsFor {
