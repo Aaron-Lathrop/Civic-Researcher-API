@@ -35,9 +35,24 @@ class Politican {
         socialMedia() {
             let social = "";
             for(let i = 0; i < this.channels.length; i++) {
-                social += `<p>${this.channels[i].type}: ${this.channels[i].id}</p>`
+                if(this.channels[i].type === "GooglePlus") {
+                    social += `<p>${this.channels[i].type}: <a href='https://plus.google.com/${this.channels[i].id}' target="_blank">${this.channels[i].id}</a></p>`
+                } else if(this.channels[i].type === "Facebook") {
+                    social += `<p>${this.channels[i].type}: <a href='https://www.facebook.com/${this.channels[i].id}'>facebook/${this.channels[i].id}</a></p>`
+                } else if(this.channels[i].type === "Twitter") {
+                    social += `<p>${this.channels[i].type}: <a href='https://twitter.com/${this.channels[i].id}'>@${this.channels[i].id}</a></p>`
+                } else if(this.channels[i].type === "YouTube") {
+                    social += `<p>${this.channels[i].type}: <a href='https://www.youtube.com/${this.channels[i].id}'>${this.channels[i].id}</a></p>`
+                }
+                
             }
             return social;
+        }
+
+        address() {
+            return `<section id="address">${this.line1}</br>
+            ${this.line2}</br>
+            ${this.city}, ${this.state} ${this.zip}</section>`
         }
 
 }
@@ -47,7 +62,9 @@ function getDataGoogleCivicAPI(userAddress, callback) {
         key: civicAPIkey,
         address: `${userAddress}`,
     };
-    $.getJSON(GOOGLE_CIVIC_URL, setting, callback);
+    $.getJSON(GOOGLE_CIVIC_URL, setting, callback)
+    .fail(function() {$('#displayingResultsFor').html(`<p>Please enter a valid U.S. address for example</p>
+    <p>1600 Pennsylvania Ave NW, Washington, DC 20500</p>`)});
 }
 
 
@@ -72,34 +89,22 @@ function createPoliticanList(data) {
             const politicalAddress = data.officials[currentIndex].address[0];
             politican.name = officials[currentIndex];
             politican.picture = data.officials[currentIndex].photoUrl;
-            politican.line1 = politicalAddress.line1;
-            politican.line2 = politicalAddress.line2;
-            politican.city = politicalAddress.city;
-            politican.state = politicalAddress.state;
-            politican.zip = politicalAddress.zip;
-            politican.party = data.officials[currentIndex].party;
-            politican.phone = data.officials[currentIndex].phones;
-            politican.url = data.officials[currentIndex].urls;
-            politican.email = data.officials[currentIndex].emails;
-            politican.channels = data.officials[currentIndex].channels;
+            politican.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
+            politican.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
+            politican.city = politicalAddress.city ? politicalAddress.city : "";
+            politican.state = politicalAddress.state ? politicalAddress.state : "";
+            politican.zip = politicalAddress.zip ? politicalAddress.zip : "";
+            politican.party = data.officials[currentIndex].party ? data.officials[currentIndex].party : "";
+            politican.phone = data.officials[currentIndex].phones ? data.officials[currentIndex].phones[0] : "";
+            politican.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
+            politican.email = data.officials[currentIndex].emails ? data.officials[currentIndex].emails : "";
+            politican.channels = data.officials[currentIndex].channels ? data.officials[currentIndex].channels : "";
         }
         politicanList.push(politican);
     };
 
     return politicanList;
 }
-
-// function renderOfficials(data) {
-//     console.log(`renderGoogleCivic ran, name = ${data.name}`);
-//     const results = data.officials.map((item, index) => `${item.name}`);
-//     return results;
-// }
-
-// function renderOffices(data) {
-//     console.log(` renderOffices ran`)
-//     const results = data.offices.map((item, index) => `${item.name}`);
-//     return results;
-// }
 
 function displayResults(data) {
     const politican = createPoliticanList(data);
@@ -135,12 +140,17 @@ function displayMoreResults(politicanList) {
         }
 
         //display general information about politican
-        $('#resultInfo').html(`<h2>${politican.name}</h2>
+        $('#resultInfo').html(`<h2>${politican.name}, ${politican.party}</h2>
         <h3>Info</h3>
-        <p>This is going to be super duper information about ${politican.name}</p>`);
+        <p>This is going to be super duper information about ${politican.name}</p>
+        <h3>Contact</h3>
+        <p>${politican.phone}</p>
+        <p>Email: ${politican.email}</p>
+        <p><a href="${politican.url}" target="_blank" rel="noopener">${politican.url}</a></p>
+        ${politican.address()}`);
 
         //display social media information
-        if(politican.channels != undefined){
+        if(politican.channels !== undefined){
             $('#resultSocialMedia').html(`<h3>Social Media</h3>
              ${politican.socialMedia()}`);
         }
@@ -152,6 +162,16 @@ function displayMoreResults(politicanList) {
     });
 }
 
+function clearResults() {
+    $("#displayingResultsFor").html("");
+    $("#results").html("");
+    $("#moreResults").html("");
+    $("#resultPicture").html(" <img src='' alt=''> ");
+    $("#resultInfo").html("");
+    $("#resultSocialMedia").html("");
+    $("#youTubeResults").html("");
+}
+
 function watchCivicSubmit() {
     console.log(`watchCivicSubmit ran`);
     $('#address-form').on('submit', function(e){
@@ -160,7 +180,7 @@ function watchCivicSubmit() {
         const query = addressQuery.val();
         if(query != undefined && query != "") {
             // $('#results').html("");
-            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
+            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`);
             addressQuery.val('');
             getDataGoogleCivicAPI(query, displayResults);
         } else if(query === "") {
@@ -227,13 +247,6 @@ function displayYouTube(data) {
 }
 
 function watchSubmit(politican) {
-      const query = politican.name;
+      const query = `${politican.name} ${politican.office}`;
       getDataYouTubeAPI(query, displayYouTube);
   }
-
-
-//General functionality
-
-function watchAddressSubmit() {
-    console.log(`watchAddressSubmit ran`);
-}
