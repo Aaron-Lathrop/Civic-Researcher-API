@@ -197,17 +197,23 @@ function watchCivicSubmit() {
 $(watchCivicSubmit);
 
 
-//Google Search API code
-function getDataGoogleSearchAPI() {
-    console.log(`getDataGoogleSearchAPI ran`);
+//Wikipedia API code
+const wikiURL = 'https://en.wikipedia.org/w/api.php';
+
+function getDataWikipediaAPI() {
+    console.log(`getDataWikipediaAPI ran`);
+    const settings {
+
+    }
+    $.getJSON(wikiURL,settings, callback);
 }
 
-function renderGoogleSearch() {
-    console.log(`renderGoogleSearch ran`);
+function renderWikipedia() {
+    console.log(`renderWikipedia ran`);
 }
 
-function displayGoogleSearch() {
-    console.log(`displayGoogleSearch ran`);
+function displayWikipedia() {
+    console.log(`displayWikipedia ran`);
 }
 
 function watchSearchSubmit() {
@@ -226,6 +232,10 @@ function getDataYouTubeAPI(searchTerm, callback) {
         key: youTubeAPIkey,
         q: `${searchTerm}`,
         maxResults: 6,
+        type: 'video',
+        order: 'Relevance',
+        sageSearch: 'strict',
+        relevanceLanguage: 'en'
     }
     $.getJSON(YOUTUBE_SEARCH_URL, settings, callback);
 }
