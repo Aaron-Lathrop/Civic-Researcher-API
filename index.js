@@ -130,7 +130,7 @@ function displayMoreResults(politicanList) {
         const id = $(this).attr("id");
         const politican = politicanList[id];
         const info = $(getDataWikipediaAPI(politican.name));
-        console.log(`This is what info returns ${info}`);
+        
         //clear previous information, in case of no results
         $('#resultSocialMedia').html("");
 
@@ -175,7 +175,7 @@ function clearResults() {
 }
 
 function watchCivicSubmit() {
-    console.log(`watchCivicSubmit ran`);
+    
     $('#address-form').on('submit', function(e){
         e.preventDefault();
         const addressQuery = $(e.currentTarget).find('#address-search');
@@ -201,10 +201,9 @@ $(watchCivicSubmit);
 
 //Wikipedia API code
 const wikiURL = 'https://en.wikipedia.org/w/api.php';
-//http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exlimit=max&explaintext&exintro&titles=Donald%20J.%20Trump&redirects=true&indexpageids
 
 function getDataWikipediaAPI(search) {
-    console.log(`getDataWikipediaAPI ran`); 
+   
     const settings = {
         origin: "*",
         format: "json",
@@ -226,41 +225,7 @@ function getDataWikipediaAPI(search) {
           <p>${info}</p>`);
       });
     }
-    
-    
-    
-    
-    
-    
-    // $.ajax( {
-    //     headers: { 'Api-User-Agent': 'Aaron' }
-    // });
-    // const wikiParams = {
-    //     action: 'query',
-    //     titles: `Mike Pence`,
-    //     prop: 'revisions',
-    //     rvprop: 'content',
-    //     format: 'json',
-    //     formatversion: 2,
-    //     origin: '*'
-    //   };
-    // $.getJSON(wikiURL, wikiParams, function(json){
-    //     console.log(json);
-    // });
 
-
-function renderWikipedia(data, search) {
-    console.log(`renderWikipedia ran`);
-
-}
-
-function displayWikipedia() {
-    console.log(`displayWikipedia ran`);
-}
-
-function watchSearchSubmit() {
-    console.log(`watchCivicSubmit ran`);
-}
 
 
 //YouTube API code
