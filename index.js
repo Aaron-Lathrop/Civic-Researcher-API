@@ -199,7 +199,8 @@ function watchCivicSubmit() {
             <p>Try just the city, for example "San Fransico"</p>`)
         }
         
-        $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
+        $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
+        <p>Click on a name for more information</p>`)
         getDataGoogleCivicAPI(query, displayResults);
         
     });
