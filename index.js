@@ -112,9 +112,9 @@ function displayResults(data) {
     let localResults = "<h2>Local Level</h2><ul>";
     for(let i=0; i < politican.length; i++) {
         if(politican[i].isFederal() === true) {
-            federalResults += `<li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li>`
+            federalResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
         } else {
-            localResults += `<li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li>`
+            localResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
         }
         
     }
@@ -129,6 +129,8 @@ function displayMoreResults(politicanList) {
     $('li').on('click', function(e) {
         const id = $(this).attr("id");
         const politican = politicanList[id];
+        const info = $(getDataWikipediaAPI(politican.name));
+        console.log(`This is what info returns ${info}`);
         //clear previous information, in case of no results
         $('#resultSocialMedia').html("");
 
@@ -136,18 +138,17 @@ function displayMoreResults(politicanList) {
         if(politican.picture != undefined){
             $('#resultPicture').find('img').attr('src', `${politican.picture}`);
         } else {
-            $('#resultPicture').find('img').attr('src', `https://2.bp.blogspot.com/-gL72SZb5r1A/V5zitzG0yiI/AAAAAAAAH1M/glC6e03Cx6E8k6qXLg61SB3r06xcfoTfACLcB/s1600/captain_america_by_cptcommunist-da55g3v.png`);
+            $('#resultPicture').find('img').attr('src', "");
         }
 
         //display general information about politican
-        $('#resultInfo').html(`<h2>${politican.name}, ${politican.party}</h2>
-        <h3>Info</h3>
-        <p>This is going to be super duper information about ${politican.name}</p>
+        $('#resultContact').html(`<h2>${politican.name}, ${politican.party}</h2>
         <h3>Contact</h3>
         <p>${politican.phone}</p>
-        <p>Email: ${politican.email}</p>
+        <p>${politican.email}</p>
         <p><a href="${politican.url}" target="_blank" rel="noopener">${politican.url}</a></p>
-        ${politican.address()}`);
+        ${politican.address()}
+        <h3>Info</h3>`);
 
         //display social media information
         if(politican.channels !== undefined){
@@ -158,7 +159,8 @@ function displayMoreResults(politicanList) {
 
         //display YouTube results
         $('#youTubeResults').html('<h3>YouTube Videos</h3>');
-        $(watchSubmit(politican));
+        $(watchSubmit(politican)).ready($('#footer').html(`<a href='#address-form'>Back to Top</a>`));
+        
     });
 }
 
@@ -199,17 +201,57 @@ $(watchCivicSubmit);
 
 //Wikipedia API code
 const wikiURL = 'https://en.wikipedia.org/w/api.php';
+//http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exlimit=max&explaintext&exintro&titles=Donald%20J.%20Trump&redirects=true&indexpageids
 
-function getDataWikipediaAPI() {
-    console.log(`getDataWikipediaAPI ran`);
-    const settings {
-
+function getDataWikipediaAPI(search) {
+    console.log(`getDataWikipediaAPI ran`); 
+    const settings = {
+        origin: "*",
+        format: "json",
+        action: "query",
+        prop: "extracts",
+        exlimit: "max",
+        explaintext:"",
+        exintro:"",
+        titles: `${search}`,
+        redirects: "true",
+        indexpageids:""
+        }
+      
+      
+      $.getJSON(wikiURL, settings).done(function(response) {
+          const key = Object.values(response.query.pages);
+          const info = key[0].extract.replace(/\n/g, "<br /> <br />");
+          $('#resultInfo').html(`
+          <p>${info}</p>`);
+      });
     }
-    $.getJSON(wikiURL,settings, callback);
-}
+    
+    
+    
+    
+    
+    
+    // $.ajax( {
+    //     headers: { 'Api-User-Agent': 'Aaron' }
+    // });
+    // const wikiParams = {
+    //     action: 'query',
+    //     titles: `Mike Pence`,
+    //     prop: 'revisions',
+    //     rvprop: 'content',
+    //     format: 'json',
+    //     formatversion: 2,
+    //     origin: '*'
+    //   };
+    // $.getJSON(wikiURL, wikiParams, function(json){
+    //     console.log(json);
+    // });
 
-function renderWikipedia() {
+
+function renderWikipedia(data, search) {
     console.log(`renderWikipedia ran`);
+
 }
 
 function displayWikipedia() {
@@ -259,4 +301,4 @@ function displayYouTube(data) {
 function watchSubmit(politican) {
       const query = `${politican.name} ${politican.office}`;
       getDataYouTubeAPI(query, displayYouTube);
-  }
+}

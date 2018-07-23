@@ -19,11 +19,12 @@ form {
 
 form label {
     display: block;
-    font-size: 18px;
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 input {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 main {
@@ -43,8 +44,17 @@ li:hover {
     color: blue;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
 #results {
-    font-size: 18px;
+    font-size: 20px;
 
 }
 
@@ -56,6 +66,23 @@ li:hover {
 
 #moreResults {
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
 
+}
+
+#resultInfo {
+    text-align: left;
+    line-height: 1.4;
+}
+
+#footer a {
+    margin-top: 35px;
+    margin-bottom: 40px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: black;
 }
