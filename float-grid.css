@@ -47,4 +47,12 @@
     .col-12 {
         width: 100%;
     }
+
+    header h1 {
+        font-size: 80px;
+    }
+
+    header h2 {
+        font-size: 40px;
+    }
 }

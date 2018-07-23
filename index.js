@@ -136,19 +136,21 @@ function displayMoreResults(politicanList) {
 
         //display picture, show default if no result
         if(politican.picture != undefined){
-            $('#resultPicture').find('img').attr('src', `${politican.picture}`);
+            $('#resultPicture').html(`<img src='${politican.picture}' alt='${politican.name}'>
+            <h2>${politican.name}</br>${politican.party}</h2>`);
+            
         } else {
-            $('#resultPicture').find('img').attr('src', "");
+            $('#resultPicture').html(`<h2>${politican.name}</br>${politican.party}</h2>`);
         }
 
+
         //display general information about politican
-        $('#resultContact').html(`<h2>${politican.name}, ${politican.party}</h2>
+        $('#resultContact').html(`
         <h3>Contact</h3>
         <p>${politican.phone}</p>
         <p>${politican.email}</p>
         <p><a href="${politican.url}" target="_blank" rel="noopener">${politican.url}</a></p>
-        ${politican.address()}
-        <h3>Info</h3>`);
+        ${politican.address()}`);
 
         //display social media information
         if(politican.channels !== undefined){
@@ -169,7 +171,7 @@ function clearResults() {
     $("#results").html("");
     $("#moreResults").html("");
     $("#resultPicture").html(" <img src='' alt=''> ");
-    $("#resultInfo").html("");
+    $("#bio").html("");
     $("#resultSocialMedia").html("");
     $("#youTubeResults").html("");
 }
@@ -186,8 +188,8 @@ function watchCivicSubmit() {
             addressQuery.val('');
             getDataGoogleCivicAPI(query, displayResults);
         } else if(query === "") {
-            $('#displayingResultsFor').html(`<p>Please submit an address before continuing, for example</p>
-            <p>1600 Pennsulvania Ave NW, Washington, DC 20500</p>`)
+            $('#displayingResultsFor').html(`<p>Opps, sorry, but nothing was found.</p>
+            <p>Try just the city, for example "San Fransico"</p>`)
         }
         
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`)
@@ -221,9 +223,10 @@ function getDataWikipediaAPI(search) {
       $.getJSON(wikiURL, settings).done(function(response) {
           const key = Object.values(response.query.pages);
           const info = key[0].extract.replace(/\n/g, "<br /> <br />");
-          $('#resultInfo').html(`
+          $('#bio').html(`<h3>Bio</h3>
           <p>${info}</p>`);
-      });
+      })
+      .fail($('#bio').html(``));
     }
 
 
