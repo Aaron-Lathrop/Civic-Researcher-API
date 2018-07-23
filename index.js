@@ -200,7 +200,7 @@ function watchCivicSubmit() {
         }
         
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
-        <p>Click on a name for more information</p>`)
+        <p>Click on a name for more information</p>`);
         getDataGoogleCivicAPI(query, displayResults);
         
     });
