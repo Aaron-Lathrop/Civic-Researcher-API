@@ -63,8 +63,11 @@ function getDataGoogleCivicAPI(userAddress, callback) {
         address: `${userAddress}`,
     };
     $.getJSON(GOOGLE_CIVIC_URL, setting, callback)
-    .fail(function() {$('#displayingResultsFor').html(`<p>Please enter a valid U.S. address for example</p>
-    <p>1600 Pennsylvania Ave NW, Washington, DC 20500</p>`)});
+    .fail(function() {
+        $('#displayingResultsFor').html(`<p>Sorry, but no results were found.</p>
+        <p>Try just the city, for example "San Fransico"</p>`);
+        // $(clearResults);
+});
 }
 
 
@@ -153,9 +156,12 @@ function displayMoreResults(politicanList) {
         ${politican.address()}`);
 
         //display social media information
-        if(politican.channels !== undefined){
+        if(politican.channels.length > 0){
             $('#resultSocialMedia').html(`<h3>Social Media</h3>
              ${politican.socialMedia()}`);
+        } else {
+            $('#resultSocialMedia').html(`<h3>Social Media</h3>
+            <p>No social media accounts found`);
         }
         
 
@@ -167,7 +173,7 @@ function displayMoreResults(politicanList) {
 }
 
 function clearResults() {
-    $("#displayingResultsFor").html("");
+    
     $("#results").html("");
     $("#moreResults").html("");
     $("#resultPicture").html(" <img src='' alt=''> ");
