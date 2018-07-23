@@ -190,7 +190,8 @@ function watchCivicSubmit() {
         const query = addressQuery.val();
         if(query != undefined && query != "") {
             // $('#results').html("");
-            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>`);
+            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
+            <p>Click on a name for more information</p>`);
             addressQuery.val('');
             getDataGoogleCivicAPI(query, displayResults);
         } else if(query === "") {
