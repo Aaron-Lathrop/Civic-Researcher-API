@@ -111,9 +111,11 @@ function createPoliticanList(data) {
 
 function displayResults(data) {
     const politican = createPoliticanList(data);
+    console.log(`The last politician's name is: ${politican[(politican.length - 1)].name}`);
+
     let federalResults = "<h2>Federal Level</h2><ul>";
     let localResults = "<h2>Local Level</h2><ul>";
-    for(let i=0; i < politican.length; i++) {
+    for(let i=0; i < (politican.length - 1); i++) {
         if(politican[i].isFederal() === true) {
             federalResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
         } else {
@@ -123,6 +125,9 @@ function displayResults(data) {
     }
     federalResults += '</ul>';
     localResults += '</ul>';
+
+    console.log(federalResults);
+    console.log(localResults);
     $('#federal').html(federalResults);
     $('#local').html(localResults);
     $(displayMoreResults(politican));
@@ -188,16 +193,17 @@ function watchCivicSubmit() {
         e.preventDefault();
         const addressQuery = $(e.currentTarget).find('#address-search');
         const query = addressQuery.val();
-        if(query != undefined && query != "") {
-            // $('#results').html("");
-            $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
-            <p>Click on a name for more information</p>`);
-            addressQuery.val('');
-            getDataGoogleCivicAPI(query, displayResults);
-        } else if(query === "") {
-            $('#displayingResultsFor').html(`<p>Opps, sorry, but nothing was found.</p>
-            <p>Try just the city, for example "San Fransico"</p>`)
-        }
+        // if(query != undefined && query != "") {
+        //     // $('#results').html("");
+        //     $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
+        //     <p>Click on a name for more information</p>`);
+        //     addressQuery.val('');
+        //     getDataGoogleCivicAPI(query, displayResults);
+        // } else if(query === "") {
+        //     $('#displayingResultsFor').html(`<p>Opps, sorry, but nothing was found.</p>
+        //     <p>Try just the city, for example "San Fransico"</p>`)
+        // }
+
         
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
         <p>Click on a name for more information</p>`);
