@@ -24,11 +24,14 @@ class Politican {
     }
 
         isFederal() {
-            if(this.office.includes('United States')) {
-                this.federal = true;
-            } else {
-                this.federal = false;
+            for(let i = 0; i < this.length; i++) {
+                if(this.office[i].includes('United States')) {
+                    this.federal = true;
+                } else {
+                    this.federal = false;
+                }
             }
+            
             return this.federal;
         }
 
