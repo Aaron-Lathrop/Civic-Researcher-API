@@ -77,9 +77,14 @@ function getDataGoogleCivicAPI(userAddress, callback) {
 function createPoliticanList(data) {
     const politicanList = [];
     const officials = data.officials.map((item, index) => `${item.name}`);
+    console.log(`the officials list is:`);
+    console.log(officials);
     const offices = data.offices.map((item, index) => `${item.name}`);
+    console.log(`the offices list is:`);
+    console.log(offices);
     let officeIndex = [];
-    for(let i = 0; i < data.officials.length - 1; i++){
+    for(let i = 0; i < officials.length - 1; i++){
+        console.log(`i = ${i} out ${offices.length -1}`);
         let politican = new Politican();
         politican.index = i;
         if(i < data.offices.length) {
@@ -87,33 +92,70 @@ function createPoliticanList(data) {
             politican.office = offices[i];
             
         } else {
-            officeIndex = data.offices[offices.length ].officialIndices;
-            politican.office = offices[i ];
+            officeIndex = data.offices[offices.length - 1].officialIndices;
+            politican.office = offices[offices.length - 1 ];
         }
+        console.log(`officeIndex = ${officeIndex}`);
+
+
         for(let j=0; j < officeIndex.length; j++) {
-            const currentIndex = officeIndex[j];
-            console.log(`${officeIndex[j]} out of ${officeIndex.length}`);
+
+            let currentIndex = officeIndex[j];
+            console.log(`j has the value: ${j}`)
+            console.log(`${currentIndex} out of ${officeIndex.length}`);
             console.log(data.officials[currentIndex]);
-            politican.name = officials[currentIndex];
-            if(data.officials[currentIndex].address !== undefined){
-            const politicalAddress = data.officials[currentIndex].address[0];
-                
+
+            if(j === 0){
+                politican.name = officials[currentIndex];
                 politican.picture = data.officials[currentIndex].photoUrl;
-                politican.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
-                politican.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
-                politican.city = politicalAddress.city ? politicalAddress.city : "";
-                politican.state = politicalAddress.state ? politicalAddress.state : "";
-                politican.zip = politicalAddress.zip ? politicalAddress.zip : "";
+                if(data.officials[currentIndex].address !== undefined){
+                const politicalAddress = data.officials[currentIndex].address[0];
+                    
+                    
+                    politican.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
+                    politican.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
+                    politican.city = politicalAddress.city ? politicalAddress.city : "";
+                    politican.state = politicalAddress.state ? politicalAddress.state : "";
+                    politican.zip = politicalAddress.zip ? politicalAddress.zip : "";
+                }
+                politican.party = data.officials[currentIndex].party ? data.officials[currentIndex].party : "";
+                politican.phone = data.officials[currentIndex].phones ? data.officials[currentIndex].phones[0] : "";
+                politican.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
+                politican.email = data.officials[currentIndex].emails ? data.officials[currentIndex].emails : "";
+                politican.channels = data.officials[currentIndex].channels ? data.officials[currentIndex].channels : "";
+            } else {
+                let politicanTwo = new Politican();
+                politicanTwo.index = (i + j);
+                politicanTwo.office = offices[i];
+                politicanTwo.name = officials[currentIndex];
+                politicanTwo.picture = data.officials[currentIndex].photoUrl;
+                if(data.officials[currentIndex].address !== undefined){
+                const politicalAddress = data.officials[currentIndex].address[0];
+                    
+                    
+                    politicanTwo.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
+                    politicanTwo.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
+                    politicanTwo.city = politicalAddress.city ? politicalAddress.city : "";
+                    politicanTwo.state = politicalAddress.state ? politicalAddress.state : "";
+                    politicanTwo.zip = politicalAddress.zip ? politicalAddress.zip : "";
+                }
+                politicanTwo.party = data.officials[currentIndex].party ? data.officials[currentIndex].party : "";
+                politicanTwo.phone = data.officials[currentIndex].phones ? data.officials[currentIndex].phones[0] : "";
+                politicanTwo.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
+                politicanTwo.email = data.officials[currentIndex].emails ? data.officials[currentIndex].emails : "";
+                politicanTwo.channels = data.officials[currentIndex].channels ? data.officials[currentIndex].channels : "";
+                console.log(`from else condition adding `);
+                console.log(politicanTwo);
+                politicanList.push(politicanTwo);
             }
-            politican.party = data.officials[currentIndex].party ? data.officials[currentIndex].party : "";
-            politican.phone = data.officials[currentIndex].phones ? data.officials[currentIndex].phones[0] : "";
-            politican.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
-            politican.email = data.officials[currentIndex].emails ? data.officials[currentIndex].emails : "";
-            politican.channels = data.officials[currentIndex].channels ? data.officials[currentIndex].channels : "";
+        }
+        while(politicanList.length >= officials.length) {
+            politicanList.pop();
         }
         politicanList.push(politican);
     };
-
+    console.log(`The politicianList is:`);
+    console.log(politicanList);
     return politicanList;
 }
 
@@ -123,7 +165,7 @@ function displayResults(data) {
 
     let federalResults = "<h2>Federal Level</h2><ul>";
     let localResults = "<h2>Local Level</h2><ul>";
-    for(let i=0; i < (politican.length - 1); i++) {
+    for(let i=0; i < (politican.length); i++) {
         if(politican[i].isFederal() === true) {
             federalResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
         } else {
