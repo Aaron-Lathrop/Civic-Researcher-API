@@ -24,13 +24,13 @@ class Politican {
     }
 
         isFederal() {
-            for(let i = 0; i < this.length; i++) {
-                if(this.office[i].includes('United States')) {
+            
+                if(this.office.includes('United States')) {
                     this.federal = true;
                 } else {
                     this.federal = false;
                 }
-            }
+            
             
             return this.federal;
         }
@@ -77,14 +77,9 @@ function getDataGoogleCivicAPI(userAddress, callback) {
 function createPoliticanList(data) {
     const politicanList = [];
     const officials = data.officials.map((item, index) => `${item.name}`);
-    console.log(`the officials list is:`);
-    console.log(officials);
     const offices = data.offices.map((item, index) => `${item.name}`);
-    console.log(`the offices list is:`);
-    console.log(offices);
     let officeIndex = [];
     for(let i = 0; i < officials.length - 1; i++){
-        console.log(`i = ${i} out ${offices.length -1}`);
         let politican = new Politican();
         politican.index = i;
         if(i < data.offices.length) {
@@ -95,15 +90,11 @@ function createPoliticanList(data) {
             officeIndex = data.offices[offices.length - 1].officialIndices;
             politican.office = offices[offices.length - 1 ];
         }
-        console.log(`officeIndex = ${officeIndex}`);
 
 
         for(let j=0; j < officeIndex.length; j++) {
 
             let currentIndex = officeIndex[j];
-            console.log(`j has the value: ${j}`)
-            console.log(`${currentIndex} out of ${officeIndex.length}`);
-            console.log(data.officials[currentIndex]);
 
             if(j === 0){
                 politican.name = officials[currentIndex];
@@ -144,18 +135,19 @@ function createPoliticanList(data) {
                 politicanTwo.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
                 politicanTwo.email = data.officials[currentIndex].emails ? data.officials[currentIndex].emails : "";
                 politicanTwo.channels = data.officials[currentIndex].channels ? data.officials[currentIndex].channels : "";
-                console.log(`from else condition adding `);
-                console.log(politicanTwo);
+    
                 politicanList.push(politicanTwo);
             }
+
         }
+        //Fix bug where the last politican is sometimes added mulitiple times
         while(politicanList.length >= officials.length) {
             politicanList.pop();
         }
+        //Add the politican to the list
         politicanList.push(politican);
     };
-    console.log(`The politicianList is:`);
-    console.log(politicanList);
+
     return politicanList;
 }
 
@@ -243,18 +235,36 @@ function watchCivicSubmit() {
         e.preventDefault();
         const addressQuery = $(e.currentTarget).find('#address-search');
         const query = addressQuery.val();
-        // if(query != undefined && query != "") {
-        //     // $('#results').html("");
-        //     $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
-        //     <p>Click on a name for more information</p>`);
-        //     addressQuery.val('');
-        //     getDataGoogleCivicAPI(query, displayResults);
-        // } else if(query === "") {
-        //     $('#displayingResultsFor').html(`<p>Opps, sorry, but nothing was found.</p>
-        //     <p>Try just the city, for example "San Fransico"</p>`)
-        // }
-
         
+        //clears previous results in case of mulitple searches
+        $('main').html(`
+        <section id='displayingResultsFor'></section>
+
+        <section id='results'>
+            <div class='row'>
+            <div id='federal' class='col-6'></div>
+            <div id='local' class='col-6'></div>
+            </div>
+        </section>
+
+        <section id='moreResults'>
+            <div class='row'>
+    
+                <section id='resultPicture'>
+                <img src='' alt=''>
+                </section>
+
+                <section class='row'>
+                    <section id='resultContact' class='col-6'></section>
+                    <section id='resultSocialMedia' class='col-6'></section>
+                </section>
+                
+                <section id='bio' ></section>
+    
+                <section id='youTubeResults' ></section>
+                <section id='footer'></section>
+            </div>   
+        </section>  `);
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
         <p>Click on a name for more information</p>`);
         getDataGoogleCivicAPI(query, displayResults);
