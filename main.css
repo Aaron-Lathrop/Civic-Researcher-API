@@ -1,7 +1,7 @@
 /* This will be the main place to style my sheet */
 
 body {
-    background-color: whitesmoke;
+    background-color: #efefef;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -11,7 +11,20 @@ body {
 }
 
 header {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 600px;
     text-align: center;
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('https://images.unsplash.com/photo-1499200493734-6ba25a83f77c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=9e5fce0a7d169007a642b2b2234af6d1&auto=format&fit=crop&w=750&q=80') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-bottom: 5px solid #a9a9a9;
+    color: white;
 }
 
 header h1 {
@@ -31,6 +44,8 @@ h1, h2, h3 {
 }
 
 form {
+    position: relative;
+    margin-top: 400px;
     text-align: center;
 }
 
@@ -38,11 +53,33 @@ form label {
     display: block;
     font-size: 20px;
     margin-bottom: 10px;
+    color: white;
 }
 
 input {
-    font-size: 20px;
+    font-size: 25px;
     padding: 5px;
+    border: 1.5px solid white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+input:hover {
+    border-color: #ff3b3f;
+}
+
+#address-submit {
+    background-color: #a9a9a9;
+    border: 2px solid #a9a9a9;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+#address-submit:hover {
+    cursor: pointer;
+    background-color: #caebf2;
+    border-color: #ff3b3f;
 }
 
 #address-search {
@@ -59,20 +96,29 @@ ul {
 
 li {
     margin-bottom: 10px;
+    color: darkblue;
 }
 
 li:hover {
     cursor: pointer;
     color: blue;
+    background-color: #caebf2;
 }
 
 a {
     text-decoration: none;
-    color: black;
+    color: darkblue;
+    
 }
 
 a:hover {
     cursor: pointer;
+    background-color: #caebf2;
+}
+
+li:active, a:active {
+    color: white;
+    background-color: #ff3b3f;
 }
 
 #results {
@@ -86,15 +132,30 @@ a:hover {
     width: 236px;
 }
 
-#moreResults {
+.greyBorder {
     text-align: center;
     font-size: 20px;
+    border: 2px solid #a9a9a9;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px;
+    background-color: #a9a9a9;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
 
+#resultContact {
+    margin-bottom: 25px;
 }
 
 #bio {
     text-align: left;
     line-height: 1.4;
+    /* max-height: 400px;
+    overflow-y: scroll; */
+    border: 2px solid #a9a9a9;
+    border-radius: 5px;
+    padding: 15px;
 }
 
 #bio h3 {
@@ -105,14 +166,64 @@ a:hover {
     margin-bottom: 10px;
 }
 
-#footer a {
-    margin-top: 35px;
-    margin-bottom: 40px;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: white;
-    border: 2px solid black;
-    border-radius: 5px;
+iframe {
+    border: none;
     background-color: black;
+}
+
+footer {
+    
+    border: none;
+    background-color: #efefef;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+footer a {
+    margin-top: 65px;
+    margin-bottom: 40px;
+    padding: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+    color: white;
+    border: 2px solid #a9a9a9;
+    border-radius: 5px;
+    background-color: #a9a9a9;
+}
+
+footer a:hover {
+    color: black;
+    border-color: #ff3b3f;
+}
+
+.card {
+    background: whitesmoke;
+    border-radius: 2px;
+    padding: 15px;
+    /* display: inline-block; */
+    height: auto;
+    /* margin: 1rem; */
+    /* position: relative; */
+    width: auto;
+  }
+  
+  .card-1 {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  }
+  
+  .card-1:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  }
+
+  .hide {
+      display: none;
+  }
+
+  hr {
+    border: 0;
+    height: 3px;
+    background: #fff;
+    /* background-image: linear-gradient(to right, #ccc, #333, #ccc); */
 }

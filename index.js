@@ -176,48 +176,52 @@ function displayResults(data) {
 }
 
 function displayMoreResults(politicanList) {
-    $('li').on('click', function(e) {
-        const id = $(this).attr("id");
-        const politican = politicanList[id];
-        const info = $(getDataWikipediaAPI(politican.name));
-        
-        //clear previous information, in case of no results
-        $('#resultSocialMedia').html("");
+    $('li').on("keypress click",function(e) {
+        if(e.which === 13 || e.type === 'click') {
+            const id = $(this).attr("id");
+            const politican = politicanList[id];
+            const info = $(getDataWikipediaAPI(politican.name));
 
-        //display picture, show default if no result
-        if(politican.picture != undefined){
-            $('#resultPicture').html(`<img src='${politican.picture}' alt='${politican.name}'>
-            <h2>${politican.name}</br>${politican.party}</h2>`);
+            $('#moreResults').addClass('greyBorder');
             
-        } else {
-            $('#resultPicture').html(`<h2>${politican.name}</br>${politican.party}</h2>`);
-        }
+            //clear previous information, in case of no results
+            $('#resultSocialMedia').html("");
 
+            //display picture, show default if no result
+            if(politican.picture != undefined){
+                $('#resultPicture').html(`<img src='${politican.picture}' alt='${politican.name}'>
+                <h2>${politican.name}</br>${politican.party}</h2>`);
+                
+            } else {
+                $('#resultPicture').html(`<h2>${politican.name}</br>${politican.party}</h2>`);
+            }
 
-        //display general information about politican
-        $('#resultContact').html(`
-        <h3>Contact</h3>
-        <p>${politican.phone}</p>
-        <p>${politican.email}</p>
-        <p><a href="${politican.url}" target="_blank" rel="noopener">${politican.url}</a></p>
-        ${politican.address()}`);
+            //display general information about politican
+            $('#resultContact').html(`
+            <h3>Contact</h3>
+            <p>${politican.phone}</p>
+            <p>${politican.email}</p>
+            <p><a href="${politican.url}" target="_blank" rel="noopener">${politican.url}</a></p>
+            ${politican.address()}`);
 
-        //display social media information
-        if(politican.channels.length > 0){
-            $('#resultSocialMedia').html(`<h3>Social Media</h3>
-             ${politican.socialMedia()}`);
-        } else {
-            $('#resultSocialMedia').html(`<h3>Social Media</h3>
-            <p>No social media accounts found`);
-        }
-        
+            //display social media information
+            if(politican.channels.length > 0){
+                $('#resultSocialMedia').html(`<h3>Social Media</h3>
+                ${politican.socialMedia()}`);
+            } else {
+                $('#resultSocialMedia').html(`<h3>Social Media</h3>
+                <p>No social media accounts found`);
+            }
+            
 
-        //display YouTube results
-        $('#youTubeResults').html('<h3>YouTube Videos</h3>');
-        $(watchSubmit(politican)).ready($('#footer').html(`<a href='#address-form'>Back to Top</a>`));
-        
+            //display YouTube results
+            $('#youTubeResults').html('<br><br><hr><h3>YouTube Videos</h3>');
+            $(watchSubmit(politican)).ready($('footer').html(`<a href='#address-form' class='card-1'>Back to Top</a><br><br><p>Created by Aaron Lathrop Miller, 2018</p>`));
+        }    
     });
+        
 }
+
 
 function clearResults() {
     
@@ -239,32 +243,25 @@ function watchCivicSubmit() {
         //clears previous results in case of mulitple searches
         $('main').html(`
         <section id='displayingResultsFor'></section>
-
-        <section id='results'>
+        <section id='results'  aria-live="polite">
             <div class='row'>
             <div id='federal' class='col-6'></div>
             <div id='local' class='col-6'></div>
             </div>
         </section>
-
-        <section id='moreResults'>
+        <section id='moreResults' >
             <div class='row'>
-    
                 <section id='resultPicture'>
                 <img src='' alt=''>
                 </section>
-
                 <section class='row'>
                     <section id='resultContact' class='col-6'></section>
                     <section id='resultSocialMedia' class='col-6'></section>
                 </section>
-                
-                <section id='bio' ></section>
-    
-                <section id='youTubeResults' ></section>
-                <section id='footer'></section>
+                <section id='bio' class="hide"></section>
+                <section id='youTubeResults'></section>
             </div>   
-        </section>  `);
+        </section>   `);
         $('#displayingResultsFor').html(`<p>Displaying results for "${query}"</p>
         <p>Click on a name for more information</p>`);
         getDataGoogleCivicAPI(query, displayResults);
@@ -272,7 +269,7 @@ function watchCivicSubmit() {
     });
 }
 
-$(watchCivicSubmit);
+$(document).ready($(watchCivicSubmit));
 
 
 //Wikipedia API code
@@ -297,6 +294,7 @@ function getDataWikipediaAPI(search) {
       $.getJSON(wikiURL, settings).done(function(response) {
           const key = Object.values(response.query.pages);
           const info = key[0].extract.replace(/\n/g, "<br /> <br />");
+          $('#bio').removeClass('hide');
           $('#bio').html(`<h3>Bio</h3>
           <p>${info}</p>`);
       })
