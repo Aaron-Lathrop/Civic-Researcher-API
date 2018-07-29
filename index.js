@@ -160,7 +160,7 @@ function displayResults(data) {
         if(politican[i].isFederal() === true) {
             federalResults += `<li id=${i}><a href='#resultPicture'>${politican[i].office} - <span  class='name'>${politican[i].name}</span></a></li>`
         } else {
-            localResults += `<li id=${i} form='results'><a href='#resultPicture'>${politican[i].office} - <span  class='name'>${politican[i].name}</span></a></li>`
+            localResults += `<li id=${i}><a href='#resultPicture'>${politican[i].office} - <span  class='name'>${politican[i].name}</span></a></li>`
         }
         
     }
