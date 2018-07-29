@@ -69,7 +69,7 @@ function getDataGoogleCivicAPI(userAddress, callback) {
     .fail(function() {
         $('#displayingResultsFor').html(`<p>Sorry, but no results were found.</p>
         <p>Try just the city, for example "San Fransico"</p>`);
-        // $(clearResults);
+        
 });
 }
 
@@ -178,19 +178,17 @@ function displayMoreResults(politicanList) {
             const id = $(this).attr("id");
             const politican = politicanList[id];
             const info = $(getDataWikipediaAPI(`${politican.name}`));
-
-            $('#moreResults').addClass('skyBorder');
             
             //clear previous information, in case of no results
             $('#resultSocialMedia').html("");
 
             //display picture, show default if no result
             if(politican.picture != undefined){
-                $('#resultPicture').html(`<img src='${politican.picture}' alt='${politican.name}'>
+                $('#resultPicture').html(`<hr><img src='${politican.picture}' alt='${politican.name}'>
                 <h2>${politican.name}</br>${politican.party}</h2>`);
                 
             } else {
-                $('#resultPicture').html(`<h2>${politican.name}</br>${politican.party}</h2>`);
+                $('#resultPicture').html(`<hr><h2>${politican.name}</br>${politican.party}</h2>`);
             }
 
             //display general information about politican
@@ -213,7 +211,7 @@ function displayMoreResults(politicanList) {
 
             //display YouTube results
             $('#youTubeResults').html('<br><br><hr><h3>YouTube Videos</h3>');
-            $(watchSubmit(politican)).ready($('footer').html(`<a href='#address-form' class='card-1'>Back to Top</a><br><br><p>Created by Aaron Lathrop Miller, 2018</p>`));
+            $(watchSubmit(politican)).ready($('footer').html(`<a href='#address-form' class='card-1'>Back to Top</a><br><br><p>Created by Aaron Lathrop Miller - 2018</p>`));
             
     });
         
@@ -229,14 +227,14 @@ function watchCivicSubmit() {
         
         //clears previous results in case of mulitple searches
         $('main').html(`
-        <section id='displayingResultsFor'></section>
+        <section id='displayingResultsFor' aria-live="polite"></section>
         <section id='results'  aria-live="polite">
             <div class='row'>
             <div id='federal' class='col-6'></div>
             <div id='local' class='col-6'></div>
             </div>
         </section>
-        <section id='moreResults' >
+        <section id='moreResults' aria-live="polite">
             <div class='row'>
                 <section id='resultPicture'>
                 <img src='' alt=''>
