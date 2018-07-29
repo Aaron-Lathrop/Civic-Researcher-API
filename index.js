@@ -87,19 +87,24 @@ function createPoliticanList(data) {
             politican.office = offices[i];
             
         } else {
-            officeIndex = data.offices[offices.length -1].officialIndices;
-            politican.office = offices[i -1];
+            officeIndex = data.offices[offices.length ].officialIndices;
+            politican.office = offices[i ];
         }
         for(let j=0; j < officeIndex.length; j++) {
             const currentIndex = officeIndex[j];
-            const politicalAddress = data.officials[currentIndex].address[0];
+            console.log(`${officeIndex[j]} out of ${officeIndex.length}`);
+            console.log(data.officials[currentIndex]);
             politican.name = officials[currentIndex];
-            politican.picture = data.officials[currentIndex].photoUrl;
-            politican.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
-            politican.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
-            politican.city = politicalAddress.city ? politicalAddress.city : "";
-            politican.state = politicalAddress.state ? politicalAddress.state : "";
-            politican.zip = politicalAddress.zip ? politicalAddress.zip : "";
+            if(data.officials[currentIndex].address !== undefined){
+            const politicalAddress = data.officials[currentIndex].address[0];
+                
+                politican.picture = data.officials[currentIndex].photoUrl;
+                politican.line1 = politicalAddress.line1 ? politicalAddress.line1 : "";
+                politican.line2 = politicalAddress.line2 ? politicalAddress.line2 : "";
+                politican.city = politicalAddress.city ? politicalAddress.city : "";
+                politican.state = politicalAddress.state ? politicalAddress.state : "";
+                politican.zip = politicalAddress.zip ? politicalAddress.zip : "";
+            }
             politican.party = data.officials[currentIndex].party ? data.officials[currentIndex].party : "";
             politican.phone = data.officials[currentIndex].phones ? data.officials[currentIndex].phones[0] : "";
             politican.url = data.officials[currentIndex].urls ? data.officials[currentIndex].urls[0] : "";
