@@ -227,8 +227,9 @@ function watchCivicSubmit() {
         
         //clears previous results in case of mulitple searches
         $('main').html(`
-        <section id='displayingResultsFor' aria-live="polite"></section>
+        
         <section id='results'  aria-live="polite">
+            
             <div class='row'>
             <div id='federal' class='col-6'></div>
             <div id='local' class='col-6'></div>

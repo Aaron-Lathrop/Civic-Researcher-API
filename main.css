@@ -89,6 +89,10 @@ input:hover {
     min-width: 50%;
 }
 
+#displayingResultsFor {
+    margin-top: 125px;
+}
+
 main {
   text-align: center;
 }
