@@ -153,36 +153,33 @@ function createPoliticanList(data) {
 
 function displayResults(data) {
     const politican = createPoliticanList(data);
-    console.log(`The last politician's name is: ${politican[(politican.length - 1)].name}`);
 
     let federalResults = "<h2>Federal Level</h2><ul>";
     let localResults = "<h2>Local Level</h2><ul>";
     for(let i=0; i < (politican.length); i++) {
         if(politican[i].isFederal() === true) {
-            federalResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
+            federalResults += `<li id=${i}><a href='#resultPicture'>${politican[i].office} - <span  class='name'>${politican[i].name}</span></a></li>`
         } else {
-            localResults += `<a href='#resultPicture'><li id=${i}>${politican[i].office} - <span  class='name'>${politican[i].name}</span></li></a>`
+            localResults += `<li id=${i} form='results'><a href='#resultPicture'>${politican[i].office} - <span  class='name'>${politican[i].name}</span></a></li>`
         }
         
     }
     federalResults += '</ul>';
     localResults += '</ul>';
-
-    console.log(federalResults);
-    console.log(localResults);
+    
     $('#federal').html(federalResults);
     $('#local').html(localResults);
     $(displayMoreResults(politican));
 }
 
 function displayMoreResults(politicanList) {
-    $('li').on("keypress click",function(e) {
-        if(e.which === 13 || e.type === 'click') {
+    $('li').click(function(e) {
+            
             const id = $(this).attr("id");
             const politican = politicanList[id];
-            const info = $(getDataWikipediaAPI(politican.name));
+            const info = $(getDataWikipediaAPI(`${politican.name}`));
 
-            $('#moreResults').addClass('greyBorder');
+            $('#moreResults').addClass('skyBorder');
             
             //clear previous information, in case of no results
             $('#resultSocialMedia').html("");
@@ -217,21 +214,11 @@ function displayMoreResults(politicanList) {
             //display YouTube results
             $('#youTubeResults').html('<br><br><hr><h3>YouTube Videos</h3>');
             $(watchSubmit(politican)).ready($('footer').html(`<a href='#address-form' class='card-1'>Back to Top</a><br><br><p>Created by Aaron Lathrop Miller, 2018</p>`));
-        }    
+            
     });
         
 }
 
-
-function clearResults() {
-    
-    $("#results").html("");
-    $("#moreResults").html("");
-    $("#resultPicture").html(" <img src='' alt=''> ");
-    $("#bio").html("");
-    $("#resultSocialMedia").html("");
-    $("#youTubeResults").html("");
-}
 
 function watchCivicSubmit() {
     
@@ -295,7 +282,7 @@ function getDataWikipediaAPI(search) {
           const key = Object.values(response.query.pages);
           const info = key[0].extract.replace(/\n/g, "<br /> <br />");
           $('#bio').removeClass('hide');
-          $('#bio').html(`<h3>Bio</h3>
+          $('#bio').html(`<hr><h3>Bio</h3>
           <p>${info}</p>`);
       })
       .fail($('#bio').html(``));
