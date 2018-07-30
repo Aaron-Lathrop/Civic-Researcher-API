@@ -21,3 +21,10 @@ While the Civic Researcher site works the majority of cases there are some known
     3. The Wikipedia API sometimes includes a reference to mulitiple results in the biographical information section. In the future, this bug will be resolved.
     
     4. The YouTube API sometimes returns irrelevant results, likely due to the low profile of the politican searched. In the future, it is hoped this issue can be resolved.
+
+
+Technology
+
+The key technologies include:
+
+HTML, CSS, JavaScript, and jQuery
