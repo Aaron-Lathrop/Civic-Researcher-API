@@ -12,7 +12,12 @@ To visit the live Civic Researcher site https://aaron-lathrop.github.io/Civic-Re
 Known Issues
 
 While the Civic Researcher site works the majority of cases there are some known issues and opportunity for improvement.
-    1. Pictures for all politicans were not available in the Google Civic Information API and some results exclude a picture. In the future, the Wikipedia API or another API will be used as an alternate source for an image in these cases.
+    
+    1. Pictures for all politicans were not available in the Google Civic Information API and some results exclude a picture. In the future, the Wikipedia API or another API will be used as 
+    an alternate source for an image in these cases.
+    
     2. The Wikipedia API does not always return biographical information on each politican and the site is set to display nothing currently. In the future, an alternate source for this information will be included so as to always provide more robust information.
+    
     3. The Wikipedia API sometimes includes a reference to mulitiple results in the biographical information section. In the future, this bug will be resolved.
+    
     4. The YouTube API sometimes returns irrelevant results, likely due to the low profile of the politican searched. In the future, it is hoped this issue can be resolved.
