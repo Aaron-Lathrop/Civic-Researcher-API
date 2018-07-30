@@ -4,6 +4,9 @@ Introduction
 
 The Civic Researcher site is designed to help people researcher U.S.A. politicans by searching a city and state (e.g. Denver, CO) by returning information from the Google Civic Information API, Wikipedia API, and YouTube API. After the user enters this information into the search bar and submits it, the site returns which results are being displayed (including no results and another example of how to input a search) along with a list of politicans on the federal and local levels that have jursidiction over the area submited. When the user clicks on a name, they're taken to more detailed results about that person including: party affiliation, contact information, social media, a brief biography, and 6 YouTube video results. The user has the option to return to the top of the screen at the bottom of the YouTube results.
 
+Homepage
+![Homepage](https://www.screencast.com/t/qbnmmYMY4)
+
 For more detailed information about the code of this project, please visit https://github.com/Aaron-Lathrop/Civic-Researcher-API
 
 To visit the live Civic Researcher site https://aaron-lathrop.github.io/Civic-Researcher-API/
