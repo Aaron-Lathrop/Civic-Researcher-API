@@ -86,7 +86,9 @@ input:hover {
 }
 
 #address-search {
-    min-width: 50%;
+    width: 50%;
+    max-width: 500px;
+    min-width: 250px;
 }
 
 #displayingResultsFor {
@@ -133,8 +135,6 @@ li:active, a:active {
     height: auto;
     width: 236px;
 }
-
-
 
 #resultContact {
     margin-bottom: 25px;
